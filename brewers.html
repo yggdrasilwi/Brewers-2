@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brewers Community Foundation | Project Hub</title>
+    <link rel="stylesheet" href="style.css">
+
+
+    <script src="script.js"></script>
+
+</head>
+<body>
+
+    <header id="top">
+        <img src="https://wtmj.com/wp-content/uploads/2022/03/BCF-Logo_Primary_Spot.png" alt="BCF Logo">
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>   
+                <li><a href="#impact">Our Impact</a></li>
+                <li><a href="#mission">Our Mission</a></li>
+                <li><a href="#programs">Programs</a></li>
+                <li><a href="#grants">Grants</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero">
+            <h1>Building a Stronger Greater Milwaukee</h1>
+            <p>We harness the pride and passion of Brewers fans to impact our community through four key pillars.</p>
+            <form action="#donate">
+                <button type="submit">DONATE NOW</button>
+            </form>
+        </section>
+
+        <section id="about">
+            <h2 class="section-title">About the Foundation</h2>
+            <p>The Brewers Community Foundation (BCF) is the 501(c)(3) non-profit arm of the Milwaukee Brewers Baseball Club. Since our inception, we have contributed millions of dollars to local nonprofits.</p>
+        </section>
+
+        <section id="impact">
+            <div class="impact-card">
+                <h2 class="snapshot-header">Community Impact Snapshot</h2>
+                <hr class="snapshot-divider">
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-icon">💰</span>
+                        <div class="stat-value">$48,000</div>
+                        <div class="stat-label">Funds Deployed</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">👥</span>
+                        <div class="stat-value">2,350</div>
+                        <div class="stat-label">People Helped</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">📋</span>
+                        <div class="stat-value">18</div>
+                        <div class="stat-label">Programs Funded</div>
+                    </div>
+                </div>
+
+                <div class="outcomes-box">
+                    <p><strong>Key Outcomes:</strong></p>
+                    <ul>
+                        <li>300 students supported in education programs</li>
+                        <li>1,500 meals provided through food initiatives</li>
+                        <li>120 families assisted with housing services</li>
+                    </ul>
+                </div>
+
+                <div class="impact-footer">
+                    <p><strong>Efficiency: ~$20 per person impacted</strong> <span class="trend">▲ 15%</span></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="mission">
+            <h2 class="section-title">Our Four Pillars of Support</h2>
+            <div class="pillar-container">
+                <article>
+                    <h3>Health</h3>
+                    <p>Focusing on wellness and medical access for underserved families.</p>
+                    <button onclick="location.href='#grants'">Learn More</button>
+                </article>
+                <article>
+                    <h3>Education</h3>
+                    <p>Providing scholarships and literacy tools for Milwaukee students.</p>
+                    <button onclick="location.href='#grants'">Learn More</button>
+                </article>
+                <article>
+                    <h3>Recreation</h3>
+                    <p>Investing in safe places for kids to play and grow.</p>
+                    <button onclick="location.href='#grants'">Learn More</button>
+                </article>
+                <article>
+                    <h3>Basic Needs</h3>
+                    <p>Tackling food insecurity and housing stability.</p>
+                    <button onclick="location.href='#grants'">Learn More</button>
+                </article>
+            </div>
+        </section>
+
+        <section id="programs">
+            <h2 class="section-title">Signature Programs & Events</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Season</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>5K Famous Racing Sausages Run</td>
+                        <td>Summer</td>
+                        <td>Annual run/walk starting at American Family Field.</td>
+                        <td><button type="button">Register</button></td>
+                    </tr>
+                    <tr>
+                        <td>Drive for Charity</td>
+                        <td>All Season</td>
+                        <td>Collection of items like school supplies and coats.</td>
+                        <td><button type="button">View Schedule</button></td>
+                    </tr>
+                    <tr>
+                        <td>Hitting 4 Hope</td>
+                        <td>Spring</td>
+                        <td>Collaborative fundraiser with local media partners.</td>
+                        <td><button type="button">Donate</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="grants">
+            <h2 class="section-title">Nonprofit Grant Requests</h2>
+            <p>Are you a 501(c)(3) organization? Apply for a BCF grant below.</p>
+            <form id="grant-form">
+                <fieldset>
+                    <legend>Grant Inquiry Form</legend>
+                    <label for="org-name">Organization Name:</label><br>
+                    <input type="text" id="org-name" name="org-name" required><br><br>
+
+                    <label for="pillar-select">Primary Pillar:</label><br>
+                    <select id="pillar-select" name="pillar">
+                        <option value="health">Health</option>
+                        <option value="edu">Education</option>
+                        <option value="rec">Recreation</option>
+                        <option value="basic">Basic Needs</option>
+                    </select><br><br>
+
+                    <label for="message">Project Brief:</label><br>
+                    <textarea id="message" rows="4" cols="50"></textarea><br><br>
+
+                    <button type="submit">Submit Inquiry</button>
+                    <button type="reset">Clear Form</button>
+                </fieldset>
+            </form>
+        </section>
+
+        <section id="donate">
+            <h2 class="section-title">Support Our Work</h2>
+            <p>Your contribution directly supports our local Milwaukee partners.</p>
+            <button type="button">Give $25</button>
+            <button type="button">Give $50</button>
+            <button type="button">Give $100</button>
+        </section>
+    </main>
+
+    <footer>
+        <p><a href="#top">Back to top ↑</a></p>
+        <p>&copy; 2026 Brewers Community Foundation Project - Team "Lock In"</p>
+        <p>Follow us on: <a href="#">Twitter</a> | <a href="#">Instagram</a> | <a href="#">Facebook</a></p>
+    </footer>
+
+    <button id="backToTop" title="Go to top">↑ Top</button>
+
+</body>
+</html>
