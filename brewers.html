@@ -26,6 +26,521 @@
         </nav>
     </header>
 
+ 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MIL 9 · CWS 7 — Final</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0efe9;
+      color: #1a1a1a;
+      padding: 32px 20px 120px;
+      min-height: 200vh;
+    }
+ 
+    /* ── Toggle Button ── */
+    #toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 20px;
+      background: #ffffff;
+      border: 1px solid #d2d0c8;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a1a;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: background 0.15s ease, box-shadow 0.15s ease, top 0.1s ease-out;
+      position: sticky;
+      top: 16px;
+      z-index: 100;
+      width: fit-content;
+    }
+    #toggle-btn:hover {
+      background: #f5f4ef;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+    }
+    #toggle-btn:active { transform: scale(0.98); }
+ 
+    .live-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: #c0392b;
+      flex-shrink: 0;
+    }
+ 
+    .btn-scores {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+    }
+    .btn-team { font-weight: 600; }
+    .btn-score { font-weight: 700; font-size: 16px; }
+    .btn-score.winner { color: #1a6e36; }
+    .btn-score.loser  { color: #999; }
+    .btn-sep { color: #ccc; font-size: 12px; }
+    .btn-label { color: #999; font-size: 12px; font-weight: 400; margin-left: 4px; }
+ 
+    #arrow {
+      font-size: 11px;
+      color: #bbb;
+      margin-left: 2px;
+      display: inline-block;
+      transition: transform 0.25s ease;
+    }
+    #arrow.open { transform: rotate(180deg); }
+ 
+    /* ── Scoreboard Panel ── */
+    #scoreboard {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.45s ease, opacity 0.3s ease, margin-top 0.3s ease;
+      margin-top: 0;
+      max-width: 700px;
+    }
+    #scoreboard.open {
+      max-height: 1600px;
+      opacity: 1;
+      margin-top: 14px;
+    }
+ 
+    .sb-card {
+      background: #fff;
+      border: 1px solid #d2d0c8;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+ 
+    /* Header */
+    .sb-header {
+      background: #1a3a5c;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .sb-meta { color: #9bbbd8; font-size: 12px; }
+    .sb-badges { display: flex; gap: 8px; align-items: center; }
+    .badge-final {
+      background: #c0392b;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 5px;
+      letter-spacing: 0.04em;
+    }
+    .badge-series {
+      background: rgba(255,255,255,0.12);
+      color: #cce0f0;
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 5px;
+    }
+ 
+    /* Linescore */
+    .linescore-wrap { overflow-x: auto; padding: 4px 18px 0; }
+    .linescore {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 480px;
+    }
+    .linescore th {
+      text-align: center;
+      padding: 8px 5px 6px;
+      color: #999;
+      font-weight: 400;
+      font-size: 11px;
+      border-bottom: 1px solid #efefef;
+    }
+    .linescore th.team-col { text-align: left; min-width: 100px; }
+    .linescore td {
+      text-align: center;
+      padding: 9px 5px;
+      border-bottom: 1px solid #f5f5f5;
+      min-width: 28px;
+    }
+    .linescore td.team-col {
+      text-align: left;
+      font-weight: 600;
+      font-size: 13px;
+      white-space: nowrap;
+      color: #1a1a1a;
+    }
+    .linescore .divider-col { border-left: 1px solid #eee; }
+    .linescore .r-val { font-size: 18px; font-weight: 700; }
+    .linescore .r-val.win  { color: #1a6e36; }
+    .linescore .r-val.lose { color: #bbb; }
+    .linescore .rhe-val  { font-weight: 500; color: #444; }
+    .linescore .inning-val  { color: #555; font-size: 13px; }
+    .linescore .inning-zero { color: #ccc; }
+    .linescore .inning-big  { color: #1a6e36; font-weight: 700; }
+    .linescore tr:last-child td { border-bottom: none; }
+ 
+    /* Sections */
+    .sb-section {
+      padding: 13px 18px;
+      border-top: 1px solid #f0f0f0;
+    }
+    .sb-section-title {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #bbb;
+      margin-bottom: 10px;
+    }
+ 
+    /* Decisions */
+    .decisions { display: flex; gap: 20px; flex-wrap: wrap; }
+    .decision-item { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+    .decision-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .decision-label.w  { background: #1a6e36; }
+    .decision-label.l  { background: #c0392b; }
+    .decision-label.sv { background: #1a5fa0; }
+    .decision-name { color: #1a1a1a; font-weight: 500; }
+ 
+    /* Team Stats */
+    .team-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .team-stat-block h4 {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      padding-bottom: 5px;
+      border-bottom: 2px solid currentColor;
+      display: inline-block;
+    }
+    .mil-color { color: #1a5fa0; }
+    .cws-color { color: #27ae60; }
+ 
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      padding: 4px 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-key { color: #aaa; }
+    .stat-val { font-weight: 600; color: #1a1a1a; }
+ 
+    /* Player Tabs */
+    .player-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .ptab {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid #d2d0c8;
+      cursor: pointer;
+      background: transparent;
+      color: #777;
+      transition: all 0.15s;
+    }
+    .ptab:hover { background: #f5f4ef; color: #333; }
+    .ptab.active {
+      background: #1a3a5c;
+      color: #fff;
+      border-color: #1a3a5c;
+    }
+ 
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+ 
+    /* Player Table */
+    .player-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .player-table thead th {
+      text-align: right;
+      padding: 5px 7px;
+      color: #bbb;
+      font-weight: 500;
+      font-size: 11px;
+      border-bottom: 1px solid #eee;
+    }
+    .player-table thead th:first-child { text-align: left; }
+    .player-table tbody td {
+      text-align: right;
+      padding: 6px 7px;
+      color: #333;
+      border-bottom: 1px solid #f8f8f8;
+    }
+    .player-table tbody td:first-child {
+      text-align: left;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+    .player-table tbody tr:last-child td { border-bottom: none; }
+    .player-table tbody tr:hover td { background: #fafaf8; }
+    .pos-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 400;
+      color: #bbb;
+      margin-left: 4px;
+    }
+    .highlight { color: #1a6e36; font-weight: 700; }
+ 
+    /* Footer */
+    .sb-footer {
+      padding: 10px 18px;
+      border-top: 1px solid #f5f5f5;
+      font-size: 11px;
+      color: #ccc;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+ 
+  <!-- Toggle Button -->
+  <button id="toggle-btn" onclick="toggleBoard()">
+    <span class="live-dot"></span>
+    <span class="btn-scores">
+      <span class="btn-team">CWS</span>
+      <span class="btn-score loser">7</span>
+      <span class="btn-sep">·</span>
+      <span class="btn-team">MIL</span>
+      <span class="btn-score winner">9</span>
+      <span class="btn-label">Final</span>
+    </span>
+    <span id="arrow">▼</span>
+  </button>
+ 
+  <!-- Scoreboard Panel -->
+  <div id="scoreboard">
+    <div class="sb-card">
+ 
+      <!-- Header -->
+      <div class="sb-header">
+        <div class="sb-meta">Sun, Mar 29 · American Family Field, Milwaukee</div>
+        <div class="sb-badges">
+          <span class="badge-series">MIL leads series 2–0</span>
+          <span class="badge-final">FINAL</span>
+        </div>
+      </div>
+ 
+      <!-- Linescore -->
+      <div class="linescore-wrap">
+        <table class="linescore">
+          <thead>
+            <tr>
+              <th class="team-col"></th>
+              <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
+              <th class="divider-col">R</th><th>H</th><th>E</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="team-col">Chicago White Sox</td>
+              <td class="inning-val">4</td>
+              <td class="inning-val">2</td>
+              <td class="inning-val">1</td>
+              <td class="inning-zero">0</td>
+              <td class="inning-zero">0</td>
+              <td class="inning-zero">0</td>
+              <td class="inning-zero">0</td>
+              <td class="inning-zero">0</td>
+              <td class="inning-zero">0</td>
+              <td class="r-val lose divider-col">7</td>
+              <td class="rhe-val">9</td>
+              <td class="rhe-val">0</td>
+            </tr>
+            <tr>
+              <td class="team-col">Milwaukee Brewers</td>
+              <td class="inning-val">2</td>
+              <td class="inning-zero">0</td>
+              <td class="inning-zero">0</td>
+              <td class="inning-zero">0</td>
+              <td class="inning-zero">0</td>
+              <td class="inning-val">1</td>
+              <td class="inning-zero">0</td>
+              <td class="inning-big">6</td>
+              <td class="inning-val">X</td>
+              <td class="r-val win divider-col">9</td>
+              <td class="rhe-val">11</td>
+              <td class="rhe-val">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+ 
+      <!-- Decisions -->
+      <div class="sb-section">
+        <div class="sb-section-title">Pitching Decisions</div>
+        <div class="decisions">
+          <div class="decision-item">
+            <span class="decision-label w">W</span>
+            <span class="decision-name">Jake Woodford</span>
+          </div>
+          <div class="decision-item">
+            <span class="decision-label l">L</span>
+            <span class="decision-name">Seranthony Domínguez</span>
+          </div>
+          <div class="decision-item">
+            <span class="decision-label sv">SV</span>
+            <span class="decision-name">Trevor Megill</span>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- Team Stats -->
+      <div class="sb-section">
+        <div class="sb-section-title">Team Stats</div>
+        <div class="team-stats-grid">
+          <div class="team-stat-block">
+            <h4 class="mil-color">Milwaukee Brewers</h4>
+            <div class="stat-row"><span class="stat-key">AVG</span><span class="stat-val">.314</span></div>
+            <div class="stat-row"><span class="stat-key">OBP</span><span class="stat-val">.429</span></div>
+            <div class="stat-row"><span class="stat-key">SLG</span><span class="stat-val">.571</span></div>
+            <div class="stat-row"><span class="stat-key">RISP</span><span class="stat-val">6-for-20</span></div>
+            <div class="stat-row"><span class="stat-key">ERA</span><span class="stat-val">7.00</span></div>
+            <div class="stat-row"><span class="stat-key">K/9</span><span class="stat-val">12.0</span></div>
+          </div>
+          <div class="team-stat-block">
+            <h4 class="cws-color">Chicago White Sox</h4>
+            <div class="stat-row"><span class="stat-key">AVG</span><span class="stat-val">.265</span></div>
+            <div class="stat-row"><span class="stat-key">OBP</span><span class="stat-val">.359</span></div>
+            <div class="stat-row"><span class="stat-key">SLG</span><span class="stat-val">.529</span></div>
+            <div class="stat-row"><span class="stat-key">RISP</span><span class="stat-val">3-for-4</span></div>
+            <div class="stat-row"><span class="stat-key">ERA</span><span class="stat-val">10.13</span></div>
+            <div class="stat-row"><span class="stat-key">K/9</span><span class="stat-val">13.5</span></div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- Player Stats -->
+      <div class="sb-section">
+        <div class="sb-section-title">Player Stats</div>
+        <div class="player-tabs">
+          <button class="ptab active" onclick="showTab('mil-bat', this)">MIL Batting</button>
+          <button class="ptab" onclick="showTab('cws-bat', this)">CWS Batting</button>
+          <button class="ptab" onclick="showTab('mil-pit', this)">MIL Pitching</button>
+          <button class="ptab" onclick="showTab('cws-pit', this)">CWS Pitching</button>
+        </div>
+ 
+        <!-- MIL Batting -->
+        <div id="mil-bat" class="tab-panel active">
+          <table class="player-table">
+            <thead><tr><th>Player</th><th>AB</th><th>H</th><th>HR</th><th>RBI</th><th>R</th><th>BB</th></tr></thead>
+            <tbody>
+              <tr><td>C. Yelich<span class="pos-badge">LF</span></td><td>1</td><td>1</td><td class="highlight">1</td><td class="highlight">3</td><td>1</td><td>0</td></tr>
+              <tr><td>G. Sánchez<span class="pos-badge">C</span></td><td>4</td><td>2</td><td class="highlight">1</td><td>2</td><td>1</td><td>0</td></tr>
+              <tr><td>L. Rengifo<span class="pos-badge">3B</span></td><td>5</td><td>1</td><td>0</td><td>2</td><td>1</td><td>1</td></tr>
+              <tr><td>B. Lockridge<span class="pos-badge">LF</span></td><td>4</td><td>2</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+              <tr><td>B. Turang<span class="pos-badge">2B</span></td><td>5</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+              <tr><td>W. Contreras<span class="pos-badge">C</span></td><td>5</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+              <tr><td>B. Perkins<span class="pos-badge">CF</span></td><td>4</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+              <tr><td>J. Ortiz<span class="pos-badge">SS</span></td><td>5</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+              <tr><td>S. Frelick<span class="pos-badge">RF</span></td><td>5</td><td>1</td><td>0</td><td>0</td><td>1</td><td>2</td></tr>
+            </tbody>
+          </table>
+        </div>
+ 
+        <!-- CWS Batting -->
+        <div id="cws-bat" class="tab-panel">
+          <table class="player-table">
+            <thead><tr><th>Player</th><th>AB</th><th>H</th><th>HR</th><th>RBI</th><th>R</th><th>BB</th></tr></thead>
+            <tbody>
+              <tr><td>C. Montgomery<span class="pos-badge">SS</span></td><td>4</td><td>2</td><td class="highlight">1</td><td class="highlight">5</td><td>1</td><td>1</td></tr>
+              <tr><td>M. Murakami<span class="pos-badge">3B</span></td><td>5</td><td>1</td><td class="highlight">1</td><td>1</td><td>2</td><td>1</td></tr>
+              <tr><td>E. Pereira<span class="pos-badge">CF</span></td><td>4</td><td>2</td><td class="highlight">1</td><td>1</td><td>1</td><td>0</td></tr>
+              <tr><td>M. Vargas<span class="pos-badge">3B</span></td><td>5</td><td>2</td><td>0</td><td>0</td><td>2</td><td>0</td></tr>
+              <tr><td>A. Benintendi<span class="pos-badge">LF</span></td><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+              <tr><td>T. Peters<span class="pos-badge">LF</span></td><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+              <tr><td>C. Meidroth<span class="pos-badge">SS</span></td><td>5</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+              <tr><td>E. Quero<span class="pos-badge">C</span></td><td>4</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            </tbody>
+          </table>
+        </div>
+ 
+        <!-- MIL Pitching -->
+        <div id="mil-pit" class="tab-panel">
+          <table class="player-table">
+            <thead><tr><th>Pitcher</th><th>IP</th><th>H</th><th>ER</th><th>K</th><th>BB</th><th>ERA</th></tr></thead>
+            <tbody>
+              <tr><td>B. Sproat<span class="pos-badge">SP</span></td><td>3.0</td><td>6</td><td>7</td><td>3</td><td>4</td><td>21.00</td></tr>
+              <tr><td>J. Woodford<span class="pos-badge">W</span></td><td>2.0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0.00</td></tr>
+              <tr><td>G. Anderson<span class="pos-badge">RP</span></td><td>2.0</td><td>1</td><td>0</td><td>3</td><td>1</td><td>0.00</td></tr>
+              <tr><td>J. Koenig<span class="pos-badge">RP</span></td><td>1.0</td><td>0</td><td>0</td><td>3</td><td>0</td><td>0.00</td></tr>
+              <tr><td>T. Megill<span class="pos-badge">SV</span></td><td>1.0</td><td>1</td><td>0</td><td>2</td><td>0</td><td>0.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+ 
+        <!-- CWS Pitching -->
+        <div id="cws-pit" class="tab-panel">
+          <table class="player-table">
+            <thead><tr><th>Pitcher</th><th>IP</th><th>H</th><th>ER</th><th>K</th><th>BB</th><th>ERA</th></tr></thead>
+            <tbody>
+              <tr><td>A. Kay<span class="pos-badge">RP</span></td><td>4.2</td><td>3</td><td>2</td><td>5</td><td>4</td><td>3.86</td></tr>
+              <tr><td>J. Leasure<span class="pos-badge">RP</span></td><td>1.1</td><td>2</td><td>1</td><td>2</td><td>0</td><td>6.75</td></tr>
+              <tr><td>G. Taylor<span class="pos-badge">RP</span></td><td>1.0</td><td>1</td><td>0</td><td>3</td><td>1</td><td>0.00</td></tr>
+              <tr><td>C. Murphy<span class="pos-badge">RP</span></td><td>0.1</td><td>3</td><td>4</td><td>1</td><td>1</td><td>108.00</td></tr>
+              <tr><td>S. Domínguez<span class="pos-badge">L</span></td><td>0.1</td><td>2</td><td>2</td><td>0</td><td>1</td><td>54.00</td></tr>
+              <tr><td>J. Hicks<span class="pos-badge">RP</span></td><td>0.1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0.00</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+ 
+      <div class="sb-footer">Data via SportRadar · Mar 29, 2026</div>
+    </div>
+  </div>
+ 
+  <script>
+    function toggleBoard() {
+      const sb    = document.getElementById('scoreboard');
+      const arrow = document.getElementById('arrow');
+      const isOpen = sb.classList.toggle('open');
+      arrow.classList.toggle('open', isOpen);
+    }
+ 
+    function showTab(id, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+    }
+ 
+    // Button drifts down gently as you scroll
+    window.addEventListener('scroll', () => {
+      const offset = Math.min(window.scrollY * 0.25, 56);
+      document.getElementById('toggle-btn').style.top = (16 + offset) + 'px';
+    }, { passive: true });
+  </script>
+ 
+</body>
+</html>
+ 
+
     <main>
         <section id="hero">
             <h1>Building a Stronger Greater Milwaukee</h1>
