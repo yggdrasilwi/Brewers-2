@@ -36,41 +36,78 @@
         </section>
 
         <section id="about">
-            <h2 class="section-title">About the Foundation</h2>
-            <p>The Brewers Community Foundation (BCF) is the 501(c)(3) non-profit arm of the Milwaukee Brewers Baseball Club. Since our inception, we have contributed millions of dollars to local nonprofits.</p>
-        </section>
+    <h2 class="section-title">About the Foundation</h2>
+    <div class="about-content">
+        <div class="about-text">
+            <p>The Brewers Community Foundation (BCF) is the 501(c)(3) non-profit arm of the Milwaukee Brewers Baseball Club. Since our inception, we have contributed millions of dollars to local nonprofits that provide quality programming in the areas of health, education, recreation, and basic needs.</p>
+            <p>Our work is fueled by the incredible fans of the Milwaukee Brewers. Whether it’s through the 5K Famous Racing Sausages Run or our annual Drive for Charity, every dollar raised stays right here in Greater Milwaukee to ensure our neighbors have the resources they need to thrive.</p>
+        </div>
+        <div class="about-stats">
+            <p><strong>Our History:</strong> Founded to harness the passion of baseball for social good, BCF has grown into a cornerstone of Milwaukee philanthropy.</p>
+            <p><strong>Our Vision:</strong> A community where every child has a safe place to play and every student has the tools to succeed.</p>
+        </div>
+    </div>
+</section>
 
         <section id="impact">
-            <div class="impact-card">
-                <h2 class="snapshot-header">Community Impact Snapshot</h2>
-                <hr class="snapshot-divider">
-                
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <span class="stat-icon">💰</span>
-                        <div class="stat-value">$48,000</div>
-                        <div class="stat-label">Funds Deployed</div>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-icon">👥</span>
-                        <div class="stat-value">2,350</div>
-                        <div class="stat-label">People Helped</div>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-icon">📋</span>
-                        <div class="stat-value">18</div>
-                        <div class="stat-label">Programs Funded</div>
-                    </div>
+    <div class="horizontal-impact-container">
+        
+        <div class="impact-card">
+            <h2 class="snapshot-header">Community Impact Snapshot</h2>
+            <hr class="snapshot-divider">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-icon">💰</span>
+                    <div class="stat-value">$48,000</div>
+                    <div class="stat-label">Funds Deployed</div>
                 </div>
+                <div class="stat-item">
+                    <span class="stat-icon">👥</span>
+                    <div class="stat-value">2,350</div>
+                    <div class="stat-label">People Helped</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">📋</span>
+                    <div class="stat-value">18</div>
+                    <div class="stat-label">Programs Funded</div>
+                </div>
+            </div>
+            <div class="outcomes-box">
+                <p><strong>Key Outcomes:</strong></p>
+                <ul>
+                    <li>300 students supported in education programs</li>
+                    <li>1,500 meals provided through food initiatives</li>
+                    <li>120 families assisted with housing services</li>
+                </ul>
+            </div>
+            <div class="impact-footer">
+                <p><strong>Efficiency: ~$20 per person impacted</strong> <span class="trend">▲ 15%</span></p>
+            </div>
+        </div>
 
-                <div class="outcomes-box">
-                    <p><strong>Key Outcomes:</strong></p>
-                    <ul>
-                        <li>300 students supported in education programs</li>
-                        <li>1,500 meals provided through food initiatives</li>
-                        <li>120 families assisted with housing services</li>
-                    </ul>
+        <div class="stories-box">
+            <h2 class="snapshot-header" style="color: #002D62;">Community Stories</h2>
+            <hr class="snapshot-divider">
+            
+            <div class="story-content">
+                <img id="story-image" src="https://uwm.edu/news/wp-content/uploads/sites/41/2017/12/grad-kiss20171217_PA_IMC_057.jpg" alt="Community Member">
+                
+                <div class="story-text-container">
+                    <p id="story-text">"BCF's scholarship helped me become the first in my family to attend college. I'm now a junior at UWM!"</p>
+                    <p id="story-author"><strong>— Marcus, Education Program</strong></p>
                 </div>
+            </div>
+
+            <div class="slider-controls">
+                <button type="button" id="prevStory">← Previous</button>
+                <button type="button" id="nextStory">Next →</button>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+                
 
                 <div class="impact-footer">
                     <p><strong>Efficiency: ~$20 per person impacted</strong> <span class="trend">▲ 15%</span></p>
@@ -139,30 +176,40 @@
         </section>
 
         <section id="grants">
-            <h2 class="section-title">Nonprofit Grant Requests</h2>
-            <p>Are you a 501(c)(3) organization? Apply for a BCF grant below.</p>
-            <form id="grant-form">
-                <fieldset>
-                    <legend>Grant Inquiry Form</legend>
-                    <label for="org-name">Organization Name:</label><br>
-                    <input type="text" id="org-name" name="org-name" required><br><br>
+    <div class="form-container">
+        <div class="form-header">
+            <h2 class="section-title">Grant Inquiry Portal</h2>
+            <p>Are you a 501(c)(3) organization? Provide your project details below to start the application process.</p>
+        </div>
 
-                    <label for="pillar-select">Primary Pillar:</label><br>
+        <form id="grant-form">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="org-name">Organization Name</label>
+                    <input type="text" id="org-name" name="org-name" placeholder="Enter legal org name" required>
+
+                    <label for="pillar-select">Primary Pillar of Support</label>
                     <select id="pillar-select" name="pillar">
-                        <option value="health">Health</option>
-                        <option value="edu">Education</option>
-                        <option value="rec">Recreation</option>
-                        <option value="basic">Basic Needs</option>
-                    </select><br><br>
+                        <option value="Health">Health</option>
+                        <option value="Education">Education</option>
+                        <option value="Recreation">Recreation</option>
+                        <option value="Basic Needs">Basic Needs</option>
+                    </select>
+                </div>
 
-                    <label for="message">Project Brief:</label><br>
-                    <textarea id="message" rows="4" cols="50"></textarea><br><br>
+                <div class="form-group">
+                    <label for="message">Project Brief & Goals</label>
+                    <textarea id="message" rows="6" placeholder="Briefly describe how these funds will be used..."></textarea>
+                </div>
+            </div>
 
-                    <button type="submit">Submit Inquiry</button>
-                    <button type="reset">Clear Form</button>
-                </fieldset>
-            </form>
-        </section>
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">Submit Inquiry</button>
+                <button type="reset" class="btn-reset">Clear Form</button>
+            </div>
+        </form>
+    </div>
+</section>
 
         <section id="donate">
             <h2 class="section-title">Support Our Work</h2>

@@ -1,62 +1,105 @@
-// 1. Wait for the page to finish loading
 document.addEventListener('DOMContentLoaded', () => {
-
-    // --- DONATION BUTTON INTERACTION ---
-    // Select all buttons (like your Give $25, $50 buttons)
-    const donationButtons = document.querySelectorAll('button');
-
+    // 1. Specific Donation Logic
+    const donationButtons = document.querySelectorAll('.btn-donate'); // Only target donation buttons
     donationButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // Change the text temporarily to show it worked
             const originalText = button.innerText;
             button.innerText = "Processing...";
-            button.style.backgroundColor = "#006400"; // Deep green from your CSS
+            button.disabled = true; // Prevent double-clicks
             
             setTimeout(() => {
                 alert("Thank you for supporting the Brewers Community Foundation!");
                 button.innerText = originalText;
-                button.style.backgroundColor = ""; // Reset to CSS default
-            }, 500);
+                button.disabled = false;
+            }, 800);
         });
     });
 
-    // --- FORM SUBMISSION INTERACTION ---
-    // This targets your Grant Inquiry form
-    const grantForm = document.querySelector('form');
-    
+    // 2. Improved Form Handling
+    const grantForm = document.getElementById('grant-form');
     if (grantForm) {
         grantForm.addEventListener('submit', (event) => {
-            event.preventDefault(); // Prevents the page from refreshing
-            
-            // Get the name from the input field
-            const nameInput = document.querySelector('input[type="text"]');
-            const userName = nameInput ? nameInput.value : "Friend";
+            event.preventDefault();
+            const orgName = document.getElementById('org-name').value;
+            const pillar = document.getElementById('pillar-select').value;
 
-            alert(`Thank you, ${userName}! Your grant inquiry has been sent to the Foundation.`);
-            grantForm.reset(); // Clears the form
+            alert(`Success! We've received the inquiry for ${orgName} regarding the ${pillar} pillar.`);
+            grantForm.reset();
         });
     }
 });
 
-// Get the button
+// 3. Back to Top Logic (Outside DOMContentLoaded is fine)
 const topBtn = document.getElementById("backToTop");
 
-// When the user scrolls down 300px from the top, show the button
-window.onscroll = function() {
-    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
         topBtn.style.display = "block";
     } else {
         topBtn.style.display = "none";
     }
-};
-
-// When the user clicks on the button, scroll to the top of the document
-topBtn.addEventListener("click", () => {
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth" // This makes it slide up instead of jumping
-    });
 });
 
+const stories = [
+    { text: "\"BCF's scholarship helped me become the first in my family to attend college.\"", author: "— Marcus, Education" },
+    { text: "\"The meal program ensured my kids had dinner every night during a very tough winter.\"", author: "— Sarah, Basic Needs" },
+    { text: "\"Having a safe park to play baseball in kept my son active and focused.\"", author: "— David, Recreation" }
+];
 
+let currentStory = 0;
+const storyText = document.getElementById('story-text');
+const storyAuthor = document.getElementById('story-author');
 
+document.getElementById('nextStory').addEventListener('click', () => {
+    currentStory = (currentStory + 1) % stories.length;
+    updateStory();
+});
+
+document.getElementById('prevStory').addEventListener('click', () => {
+    currentStory = (currentStory - 1 + stories.length) % stories.length;
+    updateStory();
+});
+
+function updateStory() {
+    storyText.innerText = stories[currentStory].text;
+    storyAuthor.innerText = stories[currentStory].author;
+}
+
+const stories = [
+    { 
+        text: "\"BCF's scholarship helped me become the first in my family to attend college. I'm now a junior at UWM!\"", 
+        author: "— Marcus, Education",
+        image: "https://images.unsplash.com/photo-1523240715630-974bb7ad1bd2?q=80&w=2070" 
+    },
+    { 
+        text: "\"The meal program ensured my kids had dinner every night during a very tough winter.\"", 
+        author: "— Sarah, Basic Needs",
+        image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070"
+    },
+    { 
+        text: "\"Having a safe park to play baseball in kept my son active and focused.\"", 
+        author: "— David, Recreation",
+        image: "https://images.unsplash.com/photo-1515003191147-3801648399af?q=80&w=2067"
+    }
+];
+
+let currentStory = 0;
+const storyText = document.getElementById('story-text');
+const storyAuthor = document.getElementById('story-author');
+const storyImage = document.getElementById('story-image');
+
+document.getElementById('nextStory').addEventListener('click', () => {
+    currentStory = (currentStory + 1) % stories.length;
+    updateStory();
+});
+
+document.getElementById('prevStory').addEventListener('click', () => {
+    currentStory = (currentStory - 1 + stories.length) % stories.length;
+    updateStory();
+});
+
+function updateStory() {
+    storyText.innerText = stories[currentStory].text;
+    storyAuthor.innerHTML = `<strong>${stories[currentStory].author}</strong>`;
+    storyImage.src = stories[currentStory].image;
+}
