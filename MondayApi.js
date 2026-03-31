@@ -81,12 +81,16 @@ fetchFromMondayAPI()
       }
     })
     console.log(Funds)
-    const person = [];
-let totalPeople = 0;
-for (let i = 0; i < people.length; i++) {
-  totalPeople += people[i];
-}
-console.log("Total People Helped:", totalPeople);
+    // FIX: people[i] is an object, not a number.
+    // We need to parse the numeric value out of the `live` column_value.
+    let totalPeople = 0;
+    for (let i = 0; i < people.length; i++) {
+      const raw = people[i].live?.value;
+      // column_values for numeric columns return a JSON string like "123"
+      const num = raw ? parseFloat(JSON.parse(raw)) : 0;
+      if (!isNaN(num)) totalPeople += num;
+    }
+    console.log("Total People Helped:", totalPeople);
   })
   .catch((err) => {
     console.error("Aw shucks! Failed to fetch data from monday.com :( ");
